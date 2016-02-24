@@ -1,7 +1,6 @@
-/* - ---------------------------------------------------------------------- - */
-// Simple AI for Honeypot Code Challenge
-//
-// Very verbose code, C compiled as C++. 
-// Mixed style, uses Cpp features as I see fit.
-// Many bad choises and style, you should probably not learn from this : ]
-/* - ---------------------------------------------------------------------- - */
+
+Simple AI for Honeypot Code Challenge - Still in a unfinished
+
+Very verbose code, C compiled as C++. 
+Mixed style, uses Cpp features as I see fit.
+Many bad choises and design, you should probably not learn from this : ]
