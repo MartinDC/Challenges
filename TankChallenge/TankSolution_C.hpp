@@ -130,7 +130,7 @@ typedef struct TC_MapNode_t {
 
 typedef struct TC_TankEntity_t {
 	int FuelAmount;
-	
+
 	int CurrentPerformingInstrStep;
 	int CurrentPerformingInstr;
 	int CurrentForbiddenInstr;
@@ -167,8 +167,8 @@ int PreTurnInit( const TC_TrnOpts_t * opts ) {
 			LOG_PRINT_FROM( "PreTurnInit" , "Failed to allocate memory for tankEntity or Instructions." );
 		}
 	}
-	
- 	TankEntity->CurrentPerformingInstrStep = 0;
+
+	TankEntity->CurrentPerformingInstrStep = 0;
 	TankEntity->FuelAmount = API::currentFuel();
 	TankEntity->CurrentPerformingInstr = T_PASSIVE_TURN;
 	TankEntity->CurrentForbiddenInstr = MAGIC_UNDEFINED_VALUE;
@@ -194,16 +194,16 @@ void TurnLogicRoutine( const TC_TrnOpts_t * opts ) {
 		TankEntity->NeighbouringNode[ T_LEFT ].NodeDist = API::lidarLeft( );
 
 		for ( int iter = TC_MAX_NEIGHBOURS - 1; iter >= 0; --iter ) {
-    	  	hasTarget = (( int ) API::identifyTarget( ));
+			hasTarget = (( int ) API::identifyTarget( ));
 			int collidedBlock = ( TankEntity->NeighbouringNode[ bestDirection ].NodeDist == 1 );
-      		if ( collidedBlock && !hasTarget ) {
-        		TankEntity->CurrentForbiddenInstr = bestDirection;
-      		}
-      
-      		int distance = TankEntity->NeighbouringNode[ iter ].NodeDist;
+			if ( collidedBlock && !hasTarget ) {
+				TankEntity->CurrentForbiddenInstr = bestDirection;
+			}
+
+			int distance = TankEntity->NeighbouringNode[ iter ].NodeDist;
 			int distanceSq = ( distance * distance );
-			
-     		int forbiddenDirection = TankEntity->CurrentForbiddenInstr;
+
+			int forbiddenDirection = TankEntity->CurrentForbiddenInstr;
 			if ( closestDistSq > distanceSq && iter != forbiddenDirection ) {
 				bestDirection = iter;
 				closestDistSq = distanceSq;
@@ -224,7 +224,7 @@ void TurnLogicRoutine( const TC_TrnOpts_t * opts ) {
 		int reachedMaxInstructions = ( currentInstructionStep >= turnMaxInstructionSteps );	
 		if ( !passiveTurn && !reachedMaxInstructions ) {	
 			int instruction = TankEntity->Instruction.Instructions[ currentInstructionStep ];
-	 
+
 			switch ( instruction ) {
 				case T_FORWARDS: 	API::moveForward( ); break;
 				case T_BACKWARDS: 	API::moveBackward( ); break;
@@ -239,10 +239,10 @@ void TurnLogicRoutine( const TC_TrnOpts_t * opts ) {
 				default: LOG_PRINT( "Failed to find Instruction to perform or passive turn" ); 
 			}
 		}
-	
+
 		++TankEntity->CurrentPerformingInstrStep;
 	}	
-	
+
 	int lastInstruction = TankEntity->Instruction.Instructions[ TankEntity->CurrentPerformingInstrStep - 1 ];
 	int nextInstructionStep = TankEntity->CurrentPerformingInstrStep;
 	int finishedTurnMove = ( nextInstructionStep == turnMaxInstructionSteps || passiveTurn );
@@ -256,22 +256,22 @@ void TurnEnd( ) { LOG_PRINT( " - Turn ending -" ); LOG_SEPARATOR(); }
 
 class Solution {
 	public:
-	  Solution() { /* Empty by design */ }
-	  
-	void update( ) {
-		TurnStart( );
+		Solution() { /* Empty by design */ }
 
-		TurnLogicRoutine( &TC_Trn_Opts_t );
-		if ( TC_Trn_Opts_t.VerboseRun_b ) {
-			LOG_VALUE( "Turn Instruction ", TankEntity->Instruction.Instructions[ TankEntity->CurrentPerformingInstrStep ] );
-			LOG_VALUE( "Turn InstructionStep", TankEntity->CurrentPerformingInstrStep );
-			LOG_VALUE( "Turn forbidden", TankEntity->CurrentForbiddenInstr );
-			LOG_VALUE( "Instruction Done", TankEntity->Instruction.InstrDone);
-			LOG_PRINT( TankEntity->Instruction.SimpleInstrName );
+		void update( ) {
+			TurnStart( );
+
+			TurnLogicRoutine( &TC_Trn_Opts_t );
+			if ( TC_Trn_Opts_t.VerboseRun_b ) {
+				LOG_VALUE( "Turn Instruction ", TankEntity->Instruction.Instructions[ TankEntity->CurrentPerformingInstrStep ] );
+				LOG_VALUE( "Turn InstructionStep", TankEntity->CurrentPerformingInstrStep );
+				LOG_VALUE( "Turn forbidden", TankEntity->CurrentForbiddenInstr );
+				LOG_VALUE( "Instruction Done", TankEntity->Instruction.InstrDone);
+				LOG_PRINT( TankEntity->Instruction.SimpleInstrName );
+			}
+
+			TurnEnd( );
 		}
-			
-		TurnEnd( );
-	}
 };
 
 #endif
